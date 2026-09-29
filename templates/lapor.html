@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Formulir Pengaduan</h2>
+<form id="f" enctype="multipart/form-data">
+  <input name="nama_pelapor" placeholder="Nama lengkap" required>
+  <select name="kategori" id="kat" required></select>
+  <input name="judul" placeholder="Judul laporan" required>
+  <textarea name="deskripsi" placeholder="Deskripsi lengkap kejadian" required></textarea>
+  <input name="lat" type="number" step="any" placeholder="Latitude (contoh -7.7956)">
+  <input name="lng" type="number" step="any" placeholder="Longitude (contoh 110.3695)">
+  <input name="foto" type="file" accept="image/*">
+  <button>Kirim Laporan</button>
+</form>
+<div id="hasil"></div>
+{% endblock %}
+{% block scripts %}
+<script>
+el("kat").innerHTML = KATEGORI.map(k => `<option>${k}</option>`).join("");
+el("f").onsubmit = async e => {
+  e.preventDefault();
+  const r = await fetch("/api/laporan", {method: "POST", body: new FormData(e.target)});
+  const d = await r.json();
+  if (!r.ok) return alert(d.error);
+  el("hasil").innerHTML = `<div class="alert ok">
+    Laporan diterima! Simpan kode tiket Anda: <b>${d.kode_tiket}</b><br>
+    Batas respons: ${d.deadline_respons}</div>`;
+  e.target.reset();
+};
+</script>
+{% endblock %}

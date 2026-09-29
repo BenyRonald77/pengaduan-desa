@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Lacak Laporan</h2>
+<form id="f">
+  <input id="kode" placeholder="Kode tiket (contoh ADU-20260929-1234)" required>
+  <button>Lacak</button>
+</form>
+<div id="hasil"></div>
+{% endblock %}
+{% block scripts %}
+<script>
+el("f").onsubmit = async e => {
+  e.preventDefault();
+  const kode = el("kode").value.trim().toUpperCase();
+  const r = await fetch("/api/publik/lacak/" + encodeURIComponent(kode));
+  const d = await r.json();
+  if (!r.ok) return alert(d.error);
+  el("hasil").innerHTML = `
+    <div class="card">
+      <h3>${d.judul}</h3>
+      <p><b>${d.kode_tiket}</b> · ${d.kategori} · <span class="badge ${d.status}">${d.status}</span>
+      ${d.terlambat ? '<span class="badge telat">respons terlambat</span>' : ''}</p>
+      <p>${d.deskripsi}</p>
+      ${d.foto ? `<img src="/api/uploads/${d.foto}">` : ""}
+      ${d.lat ? `<p>Lokasi: ${d.lat}, ${d.lng}</p>` : ""}
+      <p>Pelapor: ${d.pelapor} · Dilapor: ${d.dibuat_pada}</p>
+      ${d.nama_petugas ? `<p>Ditangani: ${d.nama_petugas}</p>` : ""}
+      ${d.catatan_penyelesaian ? `<p><b>Penyelesaian:</b> ${d.catatan_penyelesaian}</p>` : ""}
+      <h4>Riwayat</h4>
+      <ul>${d.riwayat.map(x => `<li>${x.waktu} — ${x.status}${x.catatan ? ": " + x.catatan : ""}</li>`).join("")}</ul>
+    </div>`;
+};
+</script>
+{% endblock %}

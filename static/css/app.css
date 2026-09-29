@@ -1,0 +1,25 @@
+* { box-sizing: border-box; }
+body { font-family: system-ui, sans-serif; margin: 0; background: #f5f6f8; color: #222; }
+header { background: #166534; color: #fff; padding: 1rem 1.5rem; display: flex; align-items: center; gap: 2rem; }
+header h1 { margin: 0; font-size: 1.2rem; }
+nav a { color: #d1fae5; margin-right: 1rem; text-decoration: none; }
+nav a:hover { color: #fff; }
+main { padding: 1.5rem; max-width: 1100px; margin: 0 auto; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0; }
+.card { background: #fff; border-radius: 8px; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+.card img { width: 100%; border-radius: 6px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+table { width: 100%; border-collapse: collapse; background: #fff; margin: 1rem 0; }
+th, td { border: 1px solid #e5e7eb; padding: .5rem .75rem; text-align: left; }
+th { background: #f3f4f6; }
+form { background: #fff; padding: 1rem; border-radius: 8px; display: flex; flex-direction: column; gap: .5rem; margin: 1rem 0; max-width: 600px; }
+input, select, textarea, button { padding: .5rem .75rem; border: 1px solid #d1d5db; border-radius: 6px; font: inherit; }
+button { background: #166534; color: #fff; border: none; cursor: pointer; }
+button:hover { background: #14532d; }
+button.danger { background: #dc2626; }
+.badge { border-radius: 999px; padding: .15rem .6rem; font-size: .8rem; background: #e5e7eb; }
+.badge.baru { background: #fef3c7; } .badge.diproses { background: #dbeafe; }
+.badge.selesai { background: #d1fae5; } .badge.ditolak { background: #fee2e2; }
+.badge.telat { background: #fee2e2; color: #dc2626; font-weight: bold; }
+.alert { background: #fff; border-left: 4px solid #16a34a; padding: .75rem 1rem; margin: 1rem 0; border-radius: 4px; }
+.warn { color: #dc2626; }
