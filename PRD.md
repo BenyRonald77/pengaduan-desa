@@ -12,10 +12,10 @@ ke petugas bidang, dan setiap laporan punya deadline respons.
 
 ## Stack
 
-- Backend: Python + Flask, SQLite (stdlib `sqlite3`)
-- Upload foto: multipart, disimpan di `data/uploads/`
-- Frontend: HTML + vanilla JS + CSS murni. Titik lokasi dimasukkan sebagai
-  koordinat lat/lng (input teks, tanpa dependency peta eksternal).
+- Backend: Next.js 14 + TypeScript, Prisma 5 + SQLite
+- Upload foto: multipart, disimpan di `public/uploads/`
+- Frontend: Next.js App Router + React + Tailwind CSS. Titik lokasi dimasukkan
+  sebagai koordinat lat/lng (input teks, tanpa dependency peta eksternal).
 
 ## Model Data
 

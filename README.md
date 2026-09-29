@@ -1,32 +1,46 @@
 # Pengaduan Masyarakat Desa
 
-Warga melapor dengan foto dan titik lokasi, disposisi ke petugas, status
-terpantau publik, dan batas waktu respons tercatat.
+Kanal pengaduan warga desa yang transparan: warga melapor dengan foto dan
+titik lokasi, mendapat kode tiket untuk memantau status, aparat
+mendisposisikan ke petugas bidang, dan batas waktu respons tercatat dengan
+deteksi keterlambatan otomatis.
 
 ## Cara Menjalankan
 
 ```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-python app.py
+npm install
+cp .env.example .env
+npx prisma generate
+npx prisma db push
+npm run seed
+npm run dev
 ```
 
-Buka http://localhost:5003. Database dan folder upload dibuat otomatis
-dan di-seed saat pertama dijalankan.
+## Halaman
 
-## Struktur
+- `/` — Formulir pengaduan (nama, kategori, judul, deskripsi, lat/lng, foto)
+- `/lacak` — Lacak laporan via kode tiket, lengkap dengan riwayat status
+- `/publik` — Daftar laporan publik (identitas pelapor disamarkan)
+- `/admin` — Dashboard: statistik, disposisi laporan baru, update status
+- `/petugas` — Data petugas (tambah + daftar)
 
-```
-├── PRD.md
-├── requirements.txt
-├── app.py
-├── aduan/
-│   ├── __init__.py
-│   ├── db.py
-│   ├── schema.sql
-│   ├── seed.sql
-│   ├── api.py      # petugas + laporan + disposisi + status
-│   └── publik.py   # endpoint lacak & statistik publik
-├── static/
-└── templates/
-```
+## API
+
+- `GET/POST /api/petugas` — daftar (+filter `?kategori`) / tambah petugas
+- `GET /api/laporan` — daftar admin (+filter `?status`, `?kategori`)
+- `POST /api/laporan` — kirim laporan (multipart: foto + lat/lng)
+- `POST /api/laporan/[id]/disposisi` — disposisikan ke petugas
+- `PATCH /api/laporan/[id]/status` — selesai / ditolak
+- `GET /api/uploads/[nama]` — berkas foto
+- `GET /api/publik/lacak/[kode]` — lacak tiket (publik)
+- `GET /api/publik/laporan` — daftar publik (publik)
+- `GET /api/publik/statistik` — statistik + keterlambatan
+
+## Aturan Bisnis
+
+- Kode tiket unik format `ADU-YYYYMMDD-XXXX`.
+- Deadline respons = dibuat + 3 hari.
+- Disposisi: status `baru` → `diproses`, mencatat waktu tanggapan; jika
+  melewati deadline ditandai `terlambat`.
+- Penyelesaian membutuhkan catatan; penolakan wajib alasan.
+- Identitas pelapor disamarkan di endpoint publik (`A***`).

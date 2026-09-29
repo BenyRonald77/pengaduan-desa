@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Petugas {
+  id       Int       @id @default(autoincrement())
+  nama     String
+  kategori String
+  telepon  String?
+  laporan  Laporan[]
+
+  @@map("petugas")
+}
+
+model Laporan {
+  id                  Int         @id @default(autoincrement())
+  kodeTiket           String      @unique @map("kode_tiket")
+  namaPelapor         String      @map("nama_pelapor")
+  kategori            String
+  judul               String
+  deskripsi           String
+  foto                String?
+  lat                 Float?
+  lng                 Float?
+  status              String      @default("baru")
+  petugasId           Int?        @map("petugas_id")
+  petugas             Petugas?    @relation(fields: [petugasId], references: [id])
+  dibuatPada          String      @map("dibuat_pada")
+  deadlineRespons     String      @map("deadline_respons")
+  ditanggapiPada      String?     @map("ditanggapi_pada")
+  catatanPenyelesaian String?     @map("catatan_penyelesaian")
+  logs                StatusLog[]
+
+  @@index([status])
+  @@index([kodeTiket])
+  @@map("laporan")
+}
+
+model StatusLog {
+  id        Int     @id @default(autoincrement())
+  laporanId Int     @map("laporan_id")
+  laporan   Laporan @relation(fields: [laporanId], references: [id], onDelete: Cascade)
+  status    String
+  waktu     String
+  catatan   String?
+
+  @@index([laporanId])
+  @@map("status_log")
+}
